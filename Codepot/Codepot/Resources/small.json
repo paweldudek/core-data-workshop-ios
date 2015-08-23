@@ -1,0 +1,57 @@
+[
+    {
+        "firstName": "gustavo",
+        "lastName": "sanz",
+        "email": "gustavo.sanz@example.com",
+        "street": "9123 calle de atocha",
+        "city": "zaragoza",
+        "department": {
+            "id": "1",
+            "name": "Human Resources"
+        }
+    },
+    {
+        "firstName": "alba",
+        "lastName": "prieto",
+        "email": "alba.prieto@example.com",
+        "street": "8236 avenida de salamanca",
+        "city": "orihuela",
+        "department": {
+            "id": "1",
+            "name": "Human Resources"
+        }
+    },
+    {
+        "firstName": "gloria",
+        "lastName": "arias",
+        "email": "gloria.arias@example.com",
+        "street": "9386 calle de Ángel garcía",
+        "city": "logroño",
+        "department": {
+            "id": "2",
+            "name": "IT"
+        }
+    },
+    {
+        "firstName": "cristina",
+        "lastName": "cortes",
+        "email": "cristina.cortes@example.com",
+        "street": "9351 calle del prado",
+        "city": "elche",
+        "department": {
+            "id": "2",
+            "name": "IT"
+        }
+    },
+    {
+        "firstName": "gustavo",
+        "lastName": "herrero",
+        "email": "gustavo.herrero@example.com",
+        "street": "8115 avenida del planetario",
+        "city": "vitoria",
+        "department": {
+            "id": "1",
+            "name": "Human Resources"
+        }
+    }
+]
