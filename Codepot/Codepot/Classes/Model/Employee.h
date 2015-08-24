@@ -4,9 +4,21 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class Department;
+
 
 @interface Employee : NSManagedObject
 
-//TODO: declare properties accordingly to object model definition
+@property(nonatomic, strong) NSString *firstName;
+
+@property(nonatomic, strong) NSString *lastName;
+
+@property(nonatomic, strong) NSString *email;
+
+@property(nonatomic, strong) NSString *street;
+
+@property(nonatomic, strong) NSString *city;
+
+@property(nonatomic, strong) Department *department;
 
 @end

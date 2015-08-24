@@ -16,7 +16,13 @@
         return;
     }
 
-    //TODO: setup a managed object context with persistent store coordinator and a managed object model
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+
+    NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+
+    NSManagedObjectContext *mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    mainContext.persistentStoreCoordinator = coordinator;
+    self.mainContext = mainContext;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSURL *storeURL = [[self documentsURL] URLByAppendingPathComponent:@"DataModel.sqlite"];
@@ -24,19 +30,28 @@
                                                                                                  URL:storeURL
                                                                                                error:nil];
 
-        //TODO: check model compatibility
-        //TODO: remove old store if it's not compatible
-//        BOOL compatibleWithStoreMetadata = [model isConfiguration:nil compatibleWithStoreMetadata:storeMetadata];
+        BOOL compatibleWithStoreMetadata = [model isConfiguration:nil compatibleWithStoreMetadata:storeMetadata];
 
-        // If stores are not compatible - remove current data
-//        if (!compatibleWithStoreMetadata) {
-//            [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
-//        }
+        if (!compatibleWithStoreMetadata) {
+            [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
+        }
+
+        NSError *error;
+        if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                       configuration:nil
+                                                 URL:storeURL
+                                             options:nil
+                                               error:&error]) {
+            NSLog(@"Error adding persisten store = %@", error);
+            abort();
+        }
     });
 }
 
 - (void)save {
-    //TODO: save the context
+    if ([self.mainContext hasChanges]) {
+        [self saveOnContext:self.mainContext];
+    }
 }
 
 #pragma mark - Helpers

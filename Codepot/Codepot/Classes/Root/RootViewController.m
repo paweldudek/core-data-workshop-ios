@@ -5,6 +5,8 @@
 
 #import "RootViewController.h"
 #import "ModelController.h"
+#import "TableViewController.h"
+#import "EmployeesItemsProvider.h"
 
 @interface RootViewController ()
 
@@ -31,7 +33,10 @@
     self.title = @"Codepot Core Data";
     self.view.backgroundColor = [UIColor whiteColor];
 
-    //TODO: Create a table view controller with employees items provider and set it as contained view controller
+    EmployeesItemsProvider *itemsProvider = [[EmployeesItemsProvider alloc] initWithModelController:self.modelController];
+    TableViewController *tableViewController = [[TableViewController alloc] initWithItemsProvider:itemsProvider];
+
+    self.containedViewController = tableViewController;
 }
 
 - (void)viewDidLayoutSubviews {

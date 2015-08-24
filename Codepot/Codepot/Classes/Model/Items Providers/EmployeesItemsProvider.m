@@ -5,6 +5,7 @@
 #import "EmployeesItemsProvider.h"
 #import "ModelController.h"
 #import "CoreDataStack.h"
+#import "Employee.h"
 
 @interface EmployeesItemsProvider ()
 
@@ -34,21 +35,31 @@
             return;
         }
 
-        //TODO: prepare a fetch request to grab all employees sorted by name
-        [self loadItems:nil];
+        NSError *loadError;
+        [self loadItems:&loadError];
 
-        //TODO: call the appropriate delegate method based on result
+        if (loadError) {
+            [[self delegate] itemsProvider:self didFailToUpdateItemsWithError:loadError];
+            return;
+        }
+
+        [[self delegate] itemsProviderDidUpdateItems:self];
     }];
 }
 
+#pragma mark - Loading
+
 - (void)loadItems:(NSError **)error {
-    NSFetchRequest *fetchRequest;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Employee class])];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]];
 
     NSError *fetchError;
 
     self.items = [self.mainManagedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
 
-    *error = fetchError;
+    if (error) {
+        *error = fetchError;
+    }
 }
 
 #pragma mark - Helpers

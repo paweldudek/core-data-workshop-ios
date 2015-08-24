@@ -5,6 +5,7 @@
 #import "CoreDataStack.h"
 #import "NetworkLayer.h"
 #import "Employee.h"
+#import "Department.h"
 
 
 @implementation ModelController
@@ -43,16 +44,28 @@
 
     NSManagedObjectContext *mainContext = self.coreDataStack.mainContext;
 
-    for (NSDictionary *employeeDictionary in employeesArray) {
+    //TODO: ensure that we're not creating a new employee if there's one existing in our database already
 
-        //TODO: use appropriate entity name
-        Employee *employee = [NSEntityDescription insertNewObjectForEntityForName:nil
+    for (NSDictionary *employeeDictionary in employeesArray) {
+        //TODO: don't fetch the employee every time we want to make the check - do a bigger prefetch before
+        //TODO: you can collect all employee emails from received data to minimise memory usage
+        Employee *employee = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Employee class])
                                                            inManagedObjectContext:mainContext];
-        //TODO: parse the actual data
-        //Tip: use transformable property to store department information
+
+        employee.firstName = employeeDictionary[@"firstName"];
+        employee.lastName = employeeDictionary[@"lastName"];
+        employee.email = employeeDictionary[@"email"];
+        employee.city = employeeDictionary[@"city"];
+        employee.street = employeeDictionary[@"street"];
+
+        Department *department = [[Department alloc] init];
+        department.name = employeeDictionary[@"department"][@"name"];
+        department.identifier = employeeDictionary[@"department"][@"id"];
+
+        employee.department = department;
     }
 
-    //TODO: save the context
+    [self.coreDataStack save];
 
     completion(YES, nil);
 }

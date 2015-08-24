@@ -2,18 +2,17 @@
  * Copyright (c) 2015 Mobile Academy. All rights reserved.
  */
 #import "Employee+Printable.h"
+#import "Department.h"
 
 
 @implementation Employee (Printable)
 
-//TODO: Return appropriate values
-
 - (NSString *)title {
-    return nil;
+    return [NSString stringWithFormat:@"%@, %@", self.lastName, self.firstName];
 }
 
 - (NSString *)subtitle {
-    return nil;
+    return self.department.name;
 }
 
 @end
