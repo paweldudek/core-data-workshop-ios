@@ -26,6 +26,8 @@
 		B27A994F4072287B5C067A2A /* ModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = B27A9CF480728624A01E53E8 /* ModelController.m */; };
 		B27A9AAA8EB342BC449E6754 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B27A91AC297654AD9F1587EB /* Images.xcassets */; };
 		B27A9E421A5B5D6F3B5B9F58 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B27A920341EDBE34F44BB56A /* AppDelegate.m */; };
+		B27A9E4A67D0B77EE548B73C /* NSString+SearchNormalization.m in Sources */ = {isa = PBXBuildFile; fileRef = B27A91D5D6A9D4EE3711CC4D /* NSString+SearchNormalization.m */; };
+		B27A9F5309B95E1F667E493A /* SearchEmployeesItemsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = B27A9179C13BB4B067DAB5CE /* SearchEmployeesItemsProvider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,7 +61,9 @@
 		B27A90390E14774BBD47B2A8 /* Codepot.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Codepot.xcdatamodel; sourceTree = "<group>"; };
 		B27A90B0DA1C24AA094096A3 /* Department.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Department.m; sourceTree = "<group>"; };
 		B27A914224E1165D1EB97CB9 /* Employee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Employee.h; sourceTree = "<group>"; };
+		B27A9179C13BB4B067DAB5CE /* SearchEmployeesItemsProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchEmployeesItemsProvider.m; sourceTree = "<group>"; };
 		B27A91AC297654AD9F1587EB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		B27A91D5D6A9D4EE3711CC4D /* NSString+SearchNormalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SearchNormalization.m"; sourceTree = "<group>"; };
 		B27A920341EDBE34F44BB56A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B27A9279E2AB489DFDD5A8D9 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B27A92DEAED024F4C48970B1 /* EmployeesItemsProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmployeesItemsProvider.m; sourceTree = "<group>"; };
@@ -68,7 +72,9 @@
 		B27A9875DFD1F56CBA164A87 /* ModelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelController.h; sourceTree = "<group>"; };
 		B27A9877CCADF1C0EF0884C5 /* EmployeesItemsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmployeesItemsProvider.h; sourceTree = "<group>"; };
 		B27A98DC360444FFA4C28BDF /* Employee+Printable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Employee+Printable.m"; sourceTree = "<group>"; };
+		B27A9A6FF1C8D8F004E53B62 /* NSString+SearchNormalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SearchNormalization.h"; sourceTree = "<group>"; };
 		B27A9CF480728624A01E53E8 /* ModelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelController.m; sourceTree = "<group>"; };
+		B27A9CFA25CEC20D317AA263 /* SearchEmployeesItemsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchEmployeesItemsProvider.h; sourceTree = "<group>"; };
 		B27A9D3C5EBB5FB666F7BF1A /* Department.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Department.h; sourceTree = "<group>"; };
 		B27A9F5118375015A81C156B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Codepot/Base.lproj/LaunchScreen.xib; sourceTree = SOURCE_ROOT; };
 		B27A9FA3D816F577E75825D4 /* Employee+Printable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Employee+Printable.h"; sourceTree = "<group>"; };
@@ -113,6 +119,7 @@
 				B27A9BF6811520DD582DF080 /* Model */,
 				B27A920341EDBE34F44BB56A /* AppDelegate.m */,
 				B27A9279E2AB489DFDD5A8D9 /* AppDelegate.h */,
+				B27A9379DA43B85CA08469E2 /* Helper Categories */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -201,6 +208,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		B27A9379DA43B85CA08469E2 /* Helper Categories */ = {
+			isa = PBXGroup;
+			children = (
+				B27A91D5D6A9D4EE3711CC4D /* NSString+SearchNormalization.m */,
+				B27A9A6FF1C8D8F004E53B62 /* NSString+SearchNormalization.h */,
+			);
+			path = "Helper Categories";
+			sourceTree = "<group>";
+		};
 		B27A9496A6F1B97EF954C3E2 /* Items Providers */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +224,8 @@
 				B27A9877CCADF1C0EF0884C5 /* EmployeesItemsProvider.h */,
 				B27A98DC360444FFA4C28BDF /* Employee+Printable.m */,
 				B27A9FA3D816F577E75825D4 /* Employee+Printable.h */,
+				B27A9179C13BB4B067DAB5CE /* SearchEmployeesItemsProvider.m */,
+				B27A9CFA25CEC20D317AA263 /* SearchEmployeesItemsProvider.h */,
 			);
 			path = "Items Providers";
 			sourceTree = "<group>";
@@ -359,6 +377,8 @@
 				B27A92CF233B09651013DBD0 /* Employee+Printable.m in Sources */,
 				B27A924C203F8E2284DDB272 /* Codepot.xcdatamodel in Sources */,
 				B27A9E421A5B5D6F3B5B9F58 /* AppDelegate.m in Sources */,
+				B27A9F5309B95E1F667E493A /* SearchEmployeesItemsProvider.m in Sources */,
+				B27A9E4A67D0B77EE548B73C /* NSString+SearchNormalization.m in Sources */,
 				B27A95E0C1B8772988F36CFE /* Department.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

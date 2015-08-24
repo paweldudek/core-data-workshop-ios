@@ -5,6 +5,8 @@
 
 #import "RootViewController.h"
 #import "ModelController.h"
+#import "SearchEmployeesItemsProvider.h"
+#import "TableViewController.h"
 #import "TableViewController.h"
 #import "EmployeesItemsProvider.h"
 
@@ -20,6 +22,12 @@
     self = [super init];
     if (self) {
         _modelController = modelController;
+
+        self.searchItemsProvider = [[SearchEmployeesItemsProvider alloc] initWithStack:self.modelController.coreDataStack];
+
+        TableViewController *tableViewController = [[TableViewController alloc] initWithItemsProvider:self.searchItemsProvider];
+        self.searchController = [[UISearchController alloc] initWithSearchResultsController:tableViewController];
+        self.searchController.searchResultsUpdater = self.searchItemsProvider;
     }
 
     return self;
@@ -42,6 +50,9 @@
     //TODO: You will have to create a new items provider
 
     self.containedViewController = tableViewController;
+    [self.searchController.searchBar sizeToFit];
+
+    tableViewController.tableView.tableHeaderView = self.searchController.searchBar;
 }
 
 - (void)viewDidLayoutSubviews {

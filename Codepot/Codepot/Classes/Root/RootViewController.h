@@ -7,10 +7,15 @@
 #import <UIKit/UIKit.h>
 
 @class ModelController;
+@class SearchEmployeesItemsProvider;
 
 @interface RootViewController : UIViewController
 
 @property(nonatomic, readonly) ModelController *modelController;
+
+@property(nonatomic, strong) UISearchController *searchController;
+
+@property(nonatomic, strong) SearchEmployeesItemsProvider *searchItemsProvider;
 
 - (instancetype)initWithModelController:(ModelController *)modelController;
 

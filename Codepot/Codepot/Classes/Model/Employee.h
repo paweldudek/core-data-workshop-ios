@@ -21,4 +21,7 @@
 
 @property(nonatomic, strong) Department *department;
 
+//TODO: Add properties for normalized first and last name
+//TODO: Remember to mark them dynamic and add them to model schema as well!
+
 @end

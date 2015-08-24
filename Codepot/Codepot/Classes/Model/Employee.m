@@ -13,4 +13,6 @@
 @dynamic city;
 @dynamic department;
 
+//TODO: Override will save method and normalize both first and last name there.
+
 @end

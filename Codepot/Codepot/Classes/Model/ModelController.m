@@ -36,7 +36,13 @@
             return;
         }
 
-        [self parseResponseData:JSON completion:completion];
+        // Temporary hack to make sure OS can handle that many objects in memory ;)
+        NSUInteger halfCount = JSON.count / 2;
+        NSArray *firstBatch = [JSON subarrayWithRange:NSMakeRange(0, halfCount)];
+        NSArray *secondBatch = [JSON subarrayWithRange:NSMakeRange(halfCount, halfCount)];
+
+        [self parseResponseData:firstBatch completion:completion];
+        [self parseResponseData:secondBatch completion:completion];
     }];
 }
 
@@ -48,12 +54,13 @@
     NSManagedObjectContext *workerContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     workerContext.parentContext = self.coreDataStack.mainContext;
 
-
     [workerContext performBlock:^{
         StartMeasuringTime()
 
+        NSArray *allEmails = [employeesArray valueForKeyPath:@"email"];
+
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Employee class])];
-        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"email" ascending:YES]];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"email IN %@", allEmails];
         NSArray *employees = [workerContext executeFetchRequest:fetchRequest error:nil];
 
         NSMutableDictionary *employeesMap = [NSMutableDictionary dictionary];
