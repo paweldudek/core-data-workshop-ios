@@ -44,17 +44,23 @@
 
     NSManagedObjectContext *mainContext = self.coreDataStack.mainContext;
 
-    //TODO: ensure that we're not creating a new employee if there's one existing in our database already
-
     for (NSDictionary *employeeDictionary in employeesArray) {
-        //TODO: don't fetch the employee every time we want to make the check - do a bigger prefetch before
-        //TODO: you can collect all employee emails from received data to minimise memory usage
-        Employee *employee = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Employee class])
-                                                           inManagedObjectContext:mainContext];
+        NSString *employeeEmail = employeeDictionary[@"email"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"email == %@", employeeEmail];
+
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Employee class])];
+        fetchRequest.predicate = predicate;
+
+        Employee *employee = [[mainContext executeFetchRequest:fetchRequest error:nil] firstObject];
+
+        if (employee == nil) {
+            employee = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Employee class])
+                                                     inManagedObjectContext:mainContext];
+        }
 
         employee.firstName = employeeDictionary[@"firstName"];
         employee.lastName = employeeDictionary[@"lastName"];
-        employee.email = employeeDictionary[@"email"];
+        employee.email = employeeEmail;
         employee.city = employeeDictionary[@"city"];
         employee.street = employeeDictionary[@"street"];
 

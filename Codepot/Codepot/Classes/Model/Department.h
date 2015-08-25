@@ -4,6 +4,9 @@
 #import <Foundation/Foundation.h>
 
 
+//TODO: replace this with a managed object
+//TODO: you'll need to add a new model object in Codepot.xcdatamodel
+//TODO: and create a relationship between Department and Employee
 @interface Department : NSObject <NSCoding>
 
 @property(nonatomic, strong) NSString *identifier;

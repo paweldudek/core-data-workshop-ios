@@ -36,6 +36,11 @@
     EmployeesItemsProvider *itemsProvider = [[EmployeesItemsProvider alloc] initWithModelController:self.modelController];
     TableViewController *tableViewController = [[TableViewController alloc] initWithItemsProvider:itemsProvider];
 
+    //TODO: Optional
+    //TODO: Make RootViewController the delegate of table view controller
+    //TODO: In the did tap cell delegate callback create a new items provider for displaying people in given department
+    //TODO: You will have to create a new items provider
+
     self.containedViewController = tableViewController;
 }
 
