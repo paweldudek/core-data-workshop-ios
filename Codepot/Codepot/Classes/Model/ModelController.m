@@ -45,47 +45,52 @@
 - (void)parseResponseData:(NSArray *)employeesArray completion:(ModelUpdateCompletion)completion {
     NSParameterAssert(completion);
 
-    // TODO 1: Create worker context
-    NSManagedObjectContext *mainContext = self.coreDataStack.mainContext;
+    NSManagedObjectContext *workerContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    workerContext.parentContext = self.coreDataStack.mainContext;
 
-    StartMeasuringTime()
+    [workerContext performBlock:^{
+        StartMeasuringTime()
 
-    // TODO 2: Use block API
+        for (NSDictionary *employeeDictionary in employeesArray) {
+            NSString *employeeEmail = employeeDictionary[@"email"];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"email == %@", employeeEmail];
 
-    for (NSDictionary *employeeDictionary in employeesArray) {
-        NSString *employeeEmail = employeeDictionary[@"email"];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"email == %@", employeeEmail];
+            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Employee class])];
+            fetchRequest.predicate = predicate;
 
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Employee class])];
-        fetchRequest.predicate = predicate;
+            Employee *employee = [[workerContext executeFetchRequest:fetchRequest error:nil] firstObject];
 
-        Employee *employee = [[mainContext executeFetchRequest:fetchRequest error:nil] firstObject];
+            if (employee == nil) {
+                employee = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Employee class])
+                                                         inManagedObjectContext:workerContext];
+            }
 
-        if (employee == nil) {
-            employee = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Employee class])
-                                                     inManagedObjectContext:mainContext];
+            employee.firstName = employeeDictionary[@"firstName"];
+            employee.lastName = employeeDictionary[@"lastName"];
+            employee.email = employeeEmail;
+            employee.city = employeeDictionary[@"city"];
+            employee.street = employeeDictionary[@"street"];
+
+            Department *department = [[Department alloc] init];
+            department.name = employeeDictionary[@"department"][@"name"];
+            department.identifier = employeeDictionary[@"department"][@"id"];
+
+            employee.department = department;
         }
 
-        employee.firstName = employeeDictionary[@"firstName"];
-        employee.lastName = employeeDictionary[@"lastName"];
-        employee.email = employeeEmail;
-        employee.city = employeeDictionary[@"city"];
-        employee.street = employeeDictionary[@"street"];
+        NSError *saveError = nil;
+        if ([workerContext save:&saveError]) {
+            [self.coreDataStack save];
+        } else {
+            NSLog(@"Error while saving = %@", saveError);
+        }
 
-        Department *department = [[Department alloc] init];
-        department.name = employeeDictionary[@"department"][@"name"];
-        department.identifier = employeeDictionary[@"department"][@"id"];
+        EndMeasuringTime()
 
-        employee.department = department;
-    }
-
-    // Hint: remember to save worker thread
-    [self.coreDataStack save];
-
-    EndMeasuringTime()
-
-    // Hint: completion must be called in main queue
-    completion(YES, nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion(YES, nil);
+        });
+    }];
 }
 
 @end
