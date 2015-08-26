@@ -51,6 +51,8 @@
     [workerContext performBlock:^{
         StartMeasuringTime()
 
+        // TODO 1: Create and execute fetch request for all employees at one
+
         for (NSDictionary *employeeDictionary in employeesArray) {
             NSString *employeeEmail = employeeDictionary[@"email"];
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"email == %@", employeeEmail];
@@ -58,6 +60,8 @@
             NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Employee class])];
             fetchRequest.predicate = predicate;
 
+            // TODO 2: Instead of following execution, look for desired object in previously fetched employees array
+            
             Employee *employee = [[workerContext executeFetchRequest:fetchRequest error:nil] firstObject];
 
             if (employee == nil) {
