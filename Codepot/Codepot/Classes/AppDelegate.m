@@ -13,20 +13,12 @@
 
 @implementation AppDelegate
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.coreDataStack = [[CoreDataStack alloc] init];
-    }
-
-    return self;
-}
-
-#pragma mark -
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
+    self.coreDataStack = [[CoreDataStack alloc] initWithCompletionCallback:^{
+        NSLog(@"Yay! Created initialized core data stack!");
+    }];
 
     ModelController *modelController = [[ModelController alloc] initWithCoreDataStack:self.coreDataStack];
     RootViewController *rootViewController = [[RootViewController alloc] initWithModelController:modelController];

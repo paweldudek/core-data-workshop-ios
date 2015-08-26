@@ -7,6 +7,8 @@
 #import "Employee.h"
 #import "Department.h"
 
+#define StartMeasuringTime() CFAbsoluteTime __currentTime = CFAbsoluteTimeGetCurrent();
+#define EndMeasuringTime() CFAbsoluteTime __duration = CFAbsoluteTimeGetCurrent() - __currentTime; NSLog(@"Execution time = %lf", __duration);
 
 @implementation ModelController
 
@@ -28,7 +30,7 @@
 
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://myawesomeapi.com/employees"]];
 
-    [self.networkLayer runRequest:request withCompletion:^(NSArray *JSON, NSError *error) {
+    [self.networkLayer runRequest:request withCompletionInBackground:^(NSArray *JSON, NSError *error) {
         if (error) {
             completion(nil, error);
             return;
@@ -41,8 +43,14 @@
 #pragma mark - Parsing Data
 
 - (void)parseResponseData:(NSArray *)employeesArray completion:(ModelUpdateCompletion)completion {
+    NSParameterAssert(completion);
 
+    // TODO 1: Create worker context
     NSManagedObjectContext *mainContext = self.coreDataStack.mainContext;
+
+    StartMeasuringTime()
+
+    // TODO 2: Use block API
 
     for (NSDictionary *employeeDictionary in employeesArray) {
         NSString *employeeEmail = employeeDictionary[@"email"];
@@ -71,8 +79,12 @@
         employee.department = department;
     }
 
+    // Hint: remember to save worker thread
     [self.coreDataStack save];
 
+    EndMeasuringTime()
+
+    // Hint: completion must be called in main queue
     completion(YES, nil);
 }
 

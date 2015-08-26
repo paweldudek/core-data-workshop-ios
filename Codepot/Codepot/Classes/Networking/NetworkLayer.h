@@ -10,5 +10,6 @@ typedef void (^NetworkLayerCompletion)(NSArray *JSON, NSError *error);
 @interface NetworkLayer : NSObject
 
 - (void)runRequest:(NSURLRequest *)request withCompletion:(NetworkLayerCompletion)completion;
+- (void)runRequest:(NSURLRequest *)request withCompletionInBackground:(NetworkLayerCompletion)completion;
 
 @end

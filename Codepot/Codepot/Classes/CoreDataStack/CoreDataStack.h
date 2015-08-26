@@ -9,6 +9,9 @@
 @interface CoreDataStack : NSObject
 
 @property(nonatomic, strong, readonly) NSManagedObjectContext *mainContext;
+@property(nonatomic, copy, readonly) void (^completionCallback)();
+
+- (instancetype)initWithCompletionCallback:(void (^)())completionCallback;
 
 - (void)setUpCoreData;
 

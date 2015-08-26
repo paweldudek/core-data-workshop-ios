@@ -9,9 +9,18 @@
 
 - (void)runRequest:(__unused NSURLRequest *)request withCompletion:(NetworkLayerCompletion)completion {
     NSParameterAssert(completion);
-    [self dispatchAfterDelay:[self generateDelay] onMainQueue:YES block:^{
+    [self fetchDataWithUsingMainQueue:YES completion:completion];
+}
 
-        NSString *cannedResponsePath = [[NSBundle mainBundle] pathForResource:@"small" ofType:@"json"];
+- (void)runRequest:(NSURLRequest *)request withCompletionInBackground:(NetworkLayerCompletion)completion {
+    NSParameterAssert(completion);
+    [self fetchDataWithUsingMainQueue:NO completion:completion];
+}
+
+- (void)fetchDataWithUsingMainQueue:(BOOL)shouldUseMainQueue completion:(void (^)(NSArray *, NSError *))completion {
+    [self dispatchAfterDelay:[self generateDelay] onMainQueue:shouldUseMainQueue block:^{
+
+        NSString *cannedResponsePath = [[NSBundle mainBundle] pathForResource:@"big" ofType:@"json"];
 
         id response = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:cannedResponsePath]
                                                       options:0
