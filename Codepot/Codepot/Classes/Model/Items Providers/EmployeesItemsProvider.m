@@ -51,6 +51,7 @@
 
 - (void)loadItems:(NSError **)error {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Employee class])];
+    // TODO 1: Play with fetch request properties to improve scrolling performance
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]];
 
     NSError *fetchError;
