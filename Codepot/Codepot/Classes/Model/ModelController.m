@@ -48,38 +48,27 @@
     NSManagedObjectContext *workerContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     workerContext.parentContext = self.coreDataStack.mainContext;
 
+
     [workerContext performBlock:^{
         StartMeasuringTime()
 
-        // TODO 1: Create and execute fetch request for all employees at one
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Employee class])];
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"email" ascending:YES]];
+        NSArray *employees = [workerContext executeFetchRequest:fetchRequest error:nil];
+
+        NSMutableDictionary *employeesMap = [NSMutableDictionary dictionary];
+        for (Employee *employee in employees) {
+            employeesMap[employee.email] = employee;
+        }
 
         for (NSDictionary *employeeDictionary in employeesArray) {
             NSString *employeeEmail = employeeDictionary[@"email"];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"email == %@", employeeEmail];
-
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Employee class])];
-            fetchRequest.predicate = predicate;
-
-            // TODO 2: Instead of following execution, look for desired object in previously fetched employees array
-            
-            Employee *employee = [[workerContext executeFetchRequest:fetchRequest error:nil] firstObject];
-
+            Employee *employee = employeesMap[employeeEmail];
             if (employee == nil) {
                 employee = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Employee class])
                                                          inManagedObjectContext:workerContext];
             }
-
-            employee.firstName = employeeDictionary[@"firstName"];
-            employee.lastName = employeeDictionary[@"lastName"];
-            employee.email = employeeEmail;
-            employee.city = employeeDictionary[@"city"];
-            employee.street = employeeDictionary[@"street"];
-
-            Department *department = [[Department alloc] init];
-            department.name = employeeDictionary[@"department"][@"name"];
-            department.identifier = employeeDictionary[@"department"][@"id"];
-
-            employee.department = department;
+            [self updateEmployee:employee withJSON:employeeDictionary];
         }
 
         NSError *saveError = nil;
@@ -95,6 +84,20 @@
             completion(YES, nil);
         });
     }];
+}
+
+- (void)updateEmployee:(Employee *)employee withJSON:(NSDictionary *)employeeDictionary {
+    employee.firstName = employeeDictionary[@"firstName"];
+    employee.lastName = employeeDictionary[@"lastName"];
+    employee.email = employeeDictionary[@"email"];
+    employee.city = employeeDictionary[@"city"];
+    employee.street = employeeDictionary[@"street"];
+
+    Department *department = [[Department alloc] init];
+    department.name = employeeDictionary[@"department"][@"name"];
+    department.identifier = employeeDictionary[@"department"][@"id"];
+
+    employee.department = department;
 }
 
 @end
