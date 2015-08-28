@@ -1,6 +1,6 @@
 # Code Pot Core Data iOS Workshop
 
-Solutions and assignment are available on branches.
+Solutions and assignments are available on branches.
 
 # Slides
 
