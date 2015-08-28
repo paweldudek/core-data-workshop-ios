@@ -41,19 +41,30 @@
 
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
 
-    NSString *searchText = searchController.searchBar.text;
+    NSString *searchText = [searchController.searchBar.text stringByNormalizingForSearch];
 
-    //TODO: change these to leverage normalized first and last name
-    NSPredicate *firstNamePredicate = [NSPredicate predicateWithFormat:@"firstName CONTAINS[cd] %@", searchText];
-    NSPredicate *lastNamePredicate = [NSPredicate predicateWithFormat:@"lastName CONTAINS[cd] %@", searchText];
+    if (searchText.length) {
+        NSString *substring = [searchText substringToIndex:searchText.length - 1];
+        NSString *lastCharacter = [searchText substringFromIndex:searchText.length - 1];
+        char const *cChars = [lastCharacter cStringUsingEncoding:NSUTF8StringEncoding];
+        char lastChar = (char) (cChars[0] + 1);
 
-    NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:@[firstNamePredicate, lastNamePredicate]];
+        NSString *nextLastLetterString = [NSString stringWithFormat:@"%@%c", substring, lastChar];
 
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Employee"];
-    fetchRequest.predicate = compoundPredicate;
-    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]];
+        NSPredicate *firstNamePredicate = [NSPredicate predicateWithFormat:@"normalizedFirstName >= %@ && normalizedFirstName < %@", searchText, nextLastLetterString];
+        NSPredicate *lastNamePredicate = [NSPredicate predicateWithFormat:@"normalizedLastName  >= %@ && normalizedLastName < %@", searchText, nextLastLetterString];
 
-    self.items = [self.stack.mainContext executeFetchRequest:fetchRequest error:nil];
+        NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:@[firstNamePredicate, lastNamePredicate]];
+
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Employee"];
+        fetchRequest.predicate = compoundPredicate;
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]];
+
+        self.items = [self.stack.mainContext executeFetchRequest:fetchRequest error:nil];
+    }
+    else {
+        self.items = nil;
+    }
 
     [[self delegate] itemsProviderDidUpdateItems:self];
 

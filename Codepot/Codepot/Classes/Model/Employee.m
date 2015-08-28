@@ -3,6 +3,7 @@
  */
 #import "Employee.h"
 #import "Department.h"
+#import "NSString+SearchNormalization.h"
 
 
 @implementation Employee
@@ -12,7 +13,22 @@
 @dynamic street;
 @dynamic city;
 @dynamic department;
+@dynamic normalizedLastName;
+@dynamic normalizedFirstName;
 
-//TODO: Override will save method and normalize both first and last name there.
+- (void)willSave {
+    [super willSave];
+
+    NSString *normalizedFirstName = [self.firstName stringByNormalizingForSearch];
+    NSString *normalizedLastName = [self.lastName stringByNormalizingForSearch];
+
+    if (![self.normalizedFirstName isEqualToString:normalizedFirstName]) {
+        self.normalizedFirstName = normalizedFirstName;
+    }
+
+    if (![self.normalizedLastName isEqualToString:normalizedLastName]) {
+        self.normalizedLastName = normalizedLastName;
+    }
+}
 
 @end

@@ -21,6 +21,12 @@
 
 @property(nonatomic, strong) Department *department;
 
+#pragma mark - Searching Helpers
+
+@property(nonatomic, strong) NSString *normalizedFirstName;
+
+@property(nonatomic, strong) NSString *normalizedLastName;
+
 //TODO: Add properties for normalized first and last name
 //TODO: Remember to mark them dynamic and add them to model schema as well!
 
