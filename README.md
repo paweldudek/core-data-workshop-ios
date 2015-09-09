@@ -7,4 +7,4 @@ Solutions and assignments are available on branches.
 * [Introduction to Core Data - Pawel Dudek](https://github.com/paweldudek/core-data-workshop-ios/raw/master/Basics.pdf)
 * [Multithreading in Core Data - Maciej Oczko](https://github.com/paweldudek/core-data-workshop-ios/raw/master/Multithreading.pdf)
 * [Performance in Core Data - Maciej Oczko](https://github.com/paweldudek/core-data-workshop-ios/raw/master/Performance.pdf)
-* Search performance - Paweł Dudek
+* [Search performance](https://github.com/paweldudek/core-data-workshop-ios/raw/master/Efficient-search-and-Core-Data.pdf) - Paweł Dudek
